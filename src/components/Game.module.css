@@ -1,25 +1,55 @@
 .gameWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    width: 100%;
     background-color: #1a1a1a;
-    padding: 10px;
-    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .gameContainer {
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    position: relative;
     width: 100%;
-    height: auto; /* Allow height to adjust automatically */
-    max-width: 800px;
-    max-height: 600px;
-    aspect-ratio: 4/3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    height: 100%;
+    max-width: 720px;
+    max-height: 1280px;
     margin: auto;
+    overflow: hidden;
+}
+
+.gameContainer canvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+}
+
+.startButton {
+    position: absolute;
+    left: 50%;
+    top: 75%;
+    transform: translate(-50%, -50%);
+    background-color: #A953FF;
+    color: #FFFFFF;
+    width: 70%;
+    max-width: 500px;
+    height: 48px;
+    border-radius: 8px;
+    font-size: 24px;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.startButton:hover {
+    background-color: #8A35E8;
+    transform: translate(-50%, -50%) scale(1.02);
+}
+
+.startButton:active {
+    transform: translate(-50%, -50%) scale(0.98);
 }

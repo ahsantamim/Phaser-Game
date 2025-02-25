@@ -1,52 +1,38 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Phaser from 'phaser';
 import MainScene from '../game/MainScene';
 import styles from './Game.module.css';
 import useViewport from '../hooks/useViewport';
+import { buttonConfig } from '../config/button-config';
 
 const Game = () => {
     const gameRef = useRef(null);
     const viewport = useViewport();
+    const [gameStarted, setGameStarted] = useState(false);
 
     useEffect(() => {
-        const calculateGameSize = () => {
-            const maxWidth = 800;
-            const maxHeight = 600;
-            const windowRatio = viewport.width / viewport.height;
-            const gameRatio = maxWidth / maxHeight;
-
-            let width, height;
-
-            if (windowRatio < gameRatio) {
-                height = Math.min(viewport.height * 0.95, maxHeight);
-                width = height * gameRatio;
-            } else {
-                width = Math.min(viewport.width * 0.95, maxWidth);
-                height = width / gameRatio;
-            }
-
-            return { width, height };
-        };
-
-        const { width, height } = calculateGameSize();
+        if (!gameStarted) return;
 
         const config = {
             type: Phaser.AUTO,
             parent: 'game-container',
-            width,
-            height,
+            width: 720,
+            height: 1280,
             scale: {
                 mode: Phaser.Scale.FIT,
-                autoCenter: Phaser.Scale.CENTER_BOTH
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+                width: 720,
+                height: 1280
             },
             physics: {
                 default: 'arcade',
                 arcade: {
-                    gravity: { y: 300 },
+                    gravity: { y: 400 },
                     debug: false
                 }
             },
-            scene: MainScene
+            scene: MainScene,
+            backgroundColor: '#000000'
         };
 
         // Initialize the game
@@ -57,13 +43,26 @@ const Game = () => {
         return () => {
             if (gameRef.current) {
                 gameRef.current.destroy(true);
+                gameRef.current = null;
             }
         };
-    }, [viewport.width, viewport.height]);
+    }, [gameStarted]);
+
+    const handleStartGame = () => {
+        setGameStarted(true);
+    };
 
     return (
         <div className={styles.gameWrapper}>
-            <div id="game-container" className={styles.gameContainer}></div>
+            <div id="game-container" className={styles.gameContainer} />
+            {!gameStarted && (
+                <button 
+                    className={styles.startButton}
+                    onClick={handleStartGame}
+                >
+                    {buttonConfig.buttonText}
+                </button>
+            )}
         </div>
     );
 };

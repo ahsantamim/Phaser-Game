@@ -26,13 +26,13 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    
+
     /* Paths */
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "public/MainScene.ts"],
+  "include": ["src", "src/game/MainScene.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

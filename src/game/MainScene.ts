@@ -29,7 +29,7 @@ export default class MainScene extends Phaser.Scene {
       "https://labs.phaser.io/assets/sprites/platform.png"
     );
     this.load.image("star", "https://labs.phaser.io/assets/sprites/star.png");
-    this.load.image("bomb", "public/assets/bomb.png");
+    this.load.image("bomb", "/assets/bomb.png");
     this.load.spritesheet(
       "dude",
       "https://labs.phaser.io/assets/sprites/dude.png",
@@ -118,7 +118,7 @@ export default class MainScene extends Phaser.Scene {
     if (this.input.keyboard) {
       this.cursors = this.input.keyboard.createCursorKeys();
     } else {
-      throw new Error('Keyboard input not available');
+      throw new Error("Keyboard input not available");
     }
 
     // Stars
@@ -199,12 +199,21 @@ export default class MainScene extends Phaser.Scene {
     }
 
     // Add type guard for player body
-    if (this.player.body && this.cursors.up.isDown && this.player.body.touching.down) {
+    if (
+      this.player.body &&
+      this.cursors.up.isDown &&
+      this.player.body.touching.down
+    ) {
       this.player.setVelocityY(-450);
     }
   }
 
-  private collectStar(player: Phaser.Types.Physics.Arcade.GameObjectWithBody | Phaser.Tilemaps.Tile, star: Phaser.Types.Physics.Arcade.GameObjectWithBody | Phaser.Tilemaps.Tile): void {
+  private collectStar(
+    player:
+      | Phaser.Types.Physics.Arcade.GameObjectWithBody
+      | Phaser.Tilemaps.Tile,
+    star: Phaser.Types.Physics.Arcade.GameObjectWithBody | Phaser.Tilemaps.Tile
+  ): void {
     const playerSprite = player as Phaser.Physics.Arcade.Sprite;
     const starSprite = star as Phaser.Physics.Arcade.Sprite;
     starSprite.disableBody(true, true);
@@ -215,30 +224,40 @@ export default class MainScene extends Phaser.Scene {
 
     if (this.stars?.countActive(true) === 0 && this.platforms) {
       // Get all platforms except the ground platform
-      const platforms = this.platforms.getChildren().filter(platform => {
+      const platforms = this.platforms.getChildren().filter((platform) => {
         const p = platform as Phaser.Physics.Arcade.Sprite;
         return p.y < this.scale.height - 100; // Exclude ground platform
       });
-      
-      this.stars.children.iterate((child: Phaser.GameObjects.GameObject): boolean => {
-        const star = child as Phaser.Physics.Arcade.Sprite;
-        // Choose a random platform from the floating platforms
-        const platform = Phaser.Utils.Array.GetRandom(platforms) as Phaser.Physics.Arcade.Sprite;
-        
-        // Calculate safe spawn position above the platform
-        const minX = Math.max(50, platform.x - (platform.width * platform.scaleX) / 2 + 20);
-        const maxX = Math.min(this.scale.width - 50, platform.x + (platform.width * platform.scaleX) / 2 - 20);
-        
-        const x = Phaser.Math.Between(minX, maxX);
-        const y = platform.y - 60; // Ensure star is well above the platform
-        
-        // Enable the star with bounce for better visual feedback
-        star.enableBody(true, x, y, true, true);
-        star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.6)); // Reduce bounce variation
-        star.setVelocityX(0); // Ensure star starts with no horizontal velocity
-        star.setCollideWorldBounds(true);
-        return true; // Continue iteration
-      });
+
+      this.stars.children.iterate(
+        (child: Phaser.GameObjects.GameObject): boolean => {
+          const star = child as Phaser.Physics.Arcade.Sprite;
+          // Choose a random platform from the floating platforms
+          const platform = Phaser.Utils.Array.GetRandom(
+            platforms
+          ) as Phaser.Physics.Arcade.Sprite;
+
+          // Calculate safe spawn position above the platform
+          const minX = Math.max(
+            50,
+            platform.x - (platform.width * platform.scaleX) / 2 + 20
+          );
+          const maxX = Math.min(
+            this.scale.width - 50,
+            platform.x + (platform.width * platform.scaleX) / 2 - 20
+          );
+
+          const x = Phaser.Math.Between(minX, maxX);
+          const y = platform.y - 60; // Ensure star is well above the platform
+
+          // Enable the star with bounce for better visual feedback
+          star.enableBody(true, x, y, true, true);
+          star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.6)); // Reduce bounce variation
+          star.setVelocityX(0); // Ensure star starts with no horizontal velocity
+          star.setCollideWorldBounds(true);
+          return true; // Continue iteration
+        }
+      );
 
       // Create new bomb
       if (this.bombs) {
@@ -247,7 +266,11 @@ export default class MainScene extends Phaser.Scene {
             ? Phaser.Math.Between(this.scale.width / 2, this.scale.width - 50)
             : Phaser.Math.Between(50, this.scale.width / 2);
 
-        const bomb = this.bombs.create(x, 16, "bomb") as Phaser.Physics.Arcade.Sprite;
+        const bomb = this.bombs.create(
+          x,
+          16,
+          "bomb"
+        ) as Phaser.Physics.Arcade.Sprite;
         bomb.setBounce(1);
         bomb.setCollideWorldBounds(true);
         bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
@@ -255,7 +278,12 @@ export default class MainScene extends Phaser.Scene {
     }
   }
 
-  private hitBomb(player: Phaser.Types.Physics.Arcade.GameObjectWithBody | Phaser.Tilemaps.Tile, _bomb: Phaser.Types.Physics.Arcade.GameObjectWithBody | Phaser.Tilemaps.Tile): void {
+  private hitBomb(
+    player:
+      | Phaser.Types.Physics.Arcade.GameObjectWithBody
+      | Phaser.Tilemaps.Tile,
+    _bomb: Phaser.Types.Physics.Arcade.GameObjectWithBody | Phaser.Tilemaps.Tile
+  ): void {
     this.physics.pause();
 
     const playerSprite = player as Phaser.Physics.Arcade.Sprite;
@@ -285,7 +313,7 @@ export default class MainScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
-    console.log('Emitting gameOver event with score:', this.score);
-    this.events.emit('gameOver', this.score);
+    console.log("Emitting gameOver event with score:", this.score);
+    this.events.emit("gameOver", this.score);
   }
 }

@@ -1,5 +1,21 @@
-export const buttonConfig = {
-  buttonText: 'Start Game',
+interface ButtonStyle {
+  color: string;
+  backgroundColor: string;
+  top: string;
+  left: string;
+  width: string;
+  height: string;
+  borderRadius: string;
+  fontSize: string;
+}
+
+interface ButtonConfig {
+  buttonText: string;
+  buttonStyle: ButtonStyle;
+}
+
+export const buttonConfig: ButtonConfig = {
+  buttonText: 'Start Game ',
   buttonStyle: {
     color: '#FFFFFF',
     backgroundColor: '#A953FF',

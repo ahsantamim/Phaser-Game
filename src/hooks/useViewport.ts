@@ -1,14 +1,20 @@
 import { useState, useEffect } from 'react';
 
-const useViewport = () => {
-    const [viewport, setViewport] = useState({
+interface Viewport {
+    width: number;
+    height: number;
+    aspectRatio: number;
+}
+
+const useViewport = (): Viewport => {
+    const [viewport, setViewport] = useState<Viewport>({
         width: window.innerWidth,
         height: window.innerHeight,
         aspectRatio: window.innerWidth / window.innerHeight
     });
 
     useEffect(() => {
-        const handleResize = () => {
+        const handleResize = (): void => {
             setViewport({
                 width: window.innerWidth,
                 height: window.innerHeight,
